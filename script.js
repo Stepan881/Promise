@@ -6,6 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     select.addEventListener('change', () => {
         
+        
         const postData = () => {
             return new Promise ((resolve, reject) => {
                 const request = new XMLHttpRequest();
@@ -34,6 +35,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     const {brand, model, price} = item;
                     output.innerHTML = `Тачка ${brand} ${model} <br>
                     Цена: ${price}$`;
+                } else {
+                    output.innerHTML = `выбери тачку`;
                 }
             });
         };
