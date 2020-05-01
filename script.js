@@ -31,12 +31,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const outputData = (data) => {
             data.cars.forEach(item => {
+                console.log('item', item.brand);
+                console.dir(select);
                 if (item.brand === select.value) {
                     const {brand, model, price} = item;
                     output.innerHTML = `Тачка ${brand} ${model} <br>
                     Цена: ${price}$`;
-                } else {
-                    output.innerHTML = `выбери тачку`;
+                } else if (select.value === 'no') {
+                    output.innerHTML = `выбери тачку`; 
                 }
             });
         };
