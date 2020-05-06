@@ -1,94 +1,82 @@
 document.addEventListener('DOMContentLoaded', () => {
     'use strict';
 
-    const select = document.getElementById('cars'),
-        output = document.getElementById('output');
 
-    select.addEventListener('change', () => {
-        fetch('./cars.json', {
-            method: 'GET',
-            mode: 'cors'
-        })    
+    const API_KEY = 'trnsl.1.1.20200506T175640Z.12f379ed2868f855.6c89881b97d06d238ff54514c48848e04e46a71f',
+    
+        textarea = document.querySelector('textarea'),
+        button = document.querySelector('button'),
+        span = document.querySelector('span'),
+        select = document.querySelector('select');
+
+        button.addEventListener('click', (e) => {
+            e.preventDefault();
+          
+
+            let url = `https://translate.yandex.net/api/v1.5/tr.json/translate`,
+            body = `key=${API_KEY}&text=${textarea.value}&lang=${select.value}`;
+            
+            const postData = (url, body) => {
+                return fetch(url, {
+                    method: 'POST',
+                    body: body,
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                }); 
+            };
+
+            postData(url, body)
             .then((response) => {
                 if (response.status !== 200) {
                     throw 'error !!! ';
-                }
-                return (response.json());
-            })
-            .then((data) => {
-                outputData(data);
-            })
-            .catch((error) => {
-                outputData(error);
-                console.log('error: ', error);
+                }   
+                return response.json();
+                }).then((response) => {
+                    span.textContent = response.text;
 
-            });
-
+                    
+                })
+                .catch((error) => {
+                    console.log(error);
+    
+        });   
     });
-
-const outputData = (data) => {
-    data.cars.forEach(item => {
-        if (item.brand === select.value) {
-            const {brand, model, price} = item;
-            output.innerHTML = `Тачка ${brand} ${model} <br>
-            Цена: ${price}$`;
-        } else if (select.value === 'no') {
-            output.innerHTML = `выбери тачку`; 
-        }
-    });
-};
-
-const error = (data) => {
-    output.innerHTML = data;
-};
-
 
 });
 
 
 
 
+
+
+        //     postData(url, body)
+        //       .then((response) => {
+        //           console.log(response.status);
+                  
+        //         if (response.status !== 200) {
+        //             throw 'error !!! ';
+        //         }          
+        //         console.log(response.json());
+                
+        //       })
+        //       .catch((error) => {
+        //           console.log(error);
+                  
+        //       });  
+        // });
+
         
-// const postData = () => {
-//     return new Promise ((resolve, reject) => {
-//         const request = new XMLHttpRequest();
+        // const postData = (url, body) => {
+        //     return fetch(url, {
+        //         method: 'POST',
+        //         mode: 'no-cors',
+        //         headers: {
+        //             'Content-Type': 'application/x-www-form-urlencoded'
+        //         },
+        //         body: body
+        //     }); 
+        // };
 
-//         request.addEventListener('readystatechange', () => {
-//             if (request.readyState !== 4) {
-//                 return;
-//               }
-//             if (request.status === 200) {
-//                 const data = JSON.parse(request.responseText);
-//                 resolve(data);
-//             } else {
-//                 reject('Произошла ошибка');
-//             }
-//         });
 
-//         request.open('GET', './cars.json');
-//         request.setRequestHeader('Content-type', 'application/json');
-//         request.send();
-//     });
-// };
 
-// const outputData = (data) => {
-//     data.cars.forEach(item => {
-//         console.log('item', item.brand);
-//         console.dir(select);
-//         if (item.brand === select.value) {
-//             const {brand, model, price} = item;
-//             output.innerHTML = `Тачка ${brand} ${model} <br>
-//             Цена: ${price}$`;
-//         } else if (select.value === 'no') {
-//             output.innerHTML = `выбери тачку`; 
-//         }
-//     });
-// };
-
-// const error = (data) => {
-//     output.innerHTML = data;
-// };
-
-// postData()
-//   .then(outputData)
-//   .catch(error);
